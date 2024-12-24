@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donation Payment</title>
+    <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+    <div class="container" id="donationContainer">
+        <h2>Make a Donation</h2>
+        <form action="process_donation.php" method="POST" id="donationForm" onsubmit="return handleDonationSubmit(event)">
+            <label for="amount">Donation Amount (EGP):</label>
+            <input type="number" id="amount" name="amount" required>
+
+            <label for="payment_method">Select Payment Method:</label>
+            <select id="payment_method" name="payment_method" required onchange="showPaymentDetails(this.value)">
+                <option value="" disabled selected>Select Payment Method</option>
+                <option value="fawry_plus">Fawry Plus</option>
+                <option value="visa_card">Visa Card</option>
+            </select><br><br>
+
+            <div id="payment_details" style="display:none;">
+                <!-- Mobile Number Section for Fawry Plus -->
+                <div id="mobile_number" style="display:none;">
+                    <label for="country_code_fawry">Select Your Country Code:</label>
+                    <select id="country_code_fawry" name="country_code_fawry">
+                        <option value="+20">+20 (Egypt)</option>
+                        <option value="+1">+1 (USA)</option>
+                        <option value="+44">+44 (UK)</option>
+                        <option value="+49">+49 (Germany)</option>
+                        <option value="+33">+33 (France)</option>
+                        <option value="+39">+39 (Italy)</option>
+                        <option value="+34">+34 (Spain)</option>
+                        <option value="+91">+91 (India)</option>
+                        <option value="+81">+81 (Japan)</option>
+                        <option value="+61">+61 (Australia)</option>
+                        <option value="+55">+55 (Brazil)</option>
+                        <option value="+7">+7 (Russia)</option>
+                        <option value="+52">+52 (Mexico)</option>
+                        <option value="+27">+27 (South Africa)</option>
+                        <option value="+86">+86 (China)</option>                    
+                    </select><br><br>
+
+                    <label for="mobile_number_input">Enter Your Mobile Number:</label>
+                    <input type="text" id="mobile_number_input" name="mobile_number" placeholder="Enter your phone number"><br><br>
+
+                    <!-- Error Message for Missing Mobile Number -->
+                    <div id="mobile_error" style="color: red; display: none;">
+                        Please enter your mobile number.
+                    </div>
+                </div>
+
+                <!-- Fawry Plus Details -->
+                <div id="fawry_details" style="display:none;">
+                    <!-- Details are handled in mobile number section above -->
+                </div>
+
+                <!-- Visa Details -->
+                <div id="visa_details" style="display:none;">
+                    <label for="card_number">Card Number:</label>
+                    <input type="text" id="card_number" name="card_number" placeholder="Enter your card number" maxlength="16">
+
+                    <label for="expiry_date">Expiry Date (MM/YY):</label>
+                    <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" maxlength="5">
+
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="Enter CVV" maxlength="3">
+                    
+                    <!-- Error Message for Expiry Date -->
+                    <div id="expiry_error" style="color: red; display: none;">
+                        Your Visa card has expired. Please enter a valid card with an up-to-date expiry date.
+                    </div>
+                </div>
+            </div>
+
+            <label>
+                <input type="checkbox" id="agree" name="agree" required> I agree to the <a href="#">Terms and Conditions</a>
+            </label><br><br>
+
+            <button type="submit" id="donate_button">Donate Now</button>
+            
+            <div id="form_error" style="color: red; display: none; text-align: center;">
+                Please fill all the required fields before submitting.
+            </div>
+        </form>
+    </div>
+
+    <div id="thankYouMessage" style="display: none; text-align: center;">
+        <h2>Thank you for your donation!</h2>
+        <p>Your donation has been successfully processed.</p>
+        <button onclick="window.location.href='home2.php'">Back to Home</button>
+    </div>
+
+    <div id="visaMessage" style="display: none; text-align: center;">
+        <p>Your Visa payment details are being processed. Please wait...</p>
+    </div>
+
+    <script>
+        // Reset the form when the page is loaded or refreshed
+        window.onload = function() {
+            document.getElementById('donationForm').reset();  // Resets the form
+            document.getElementById('payment_details').style.display = 'none';  // Hides payment details section
+            document.getElementById('form_error').style.display = 'none';  // Hides error message
+            document.getElementById('donationContainer').style.display = 'block'; // Ensure donation form is visible
+            document.getElementById('thankYouMessage').style.display = 'none'; // Hide thank you message
+            document.getElementById('visaMessage').style.display = 'none';  // Hide Visa processing message
+            document.getElementById('expiry_error').style.display = 'none';  // Hide expiry error message
+            document.getElementById('mobile_error').style.display = 'none'; // Hide mobile error message
+        };
+
+        function showPaymentDetails(paymentMethod) {
+            document.getElementById('payment_details').style.display = 'block';
+            document.getElementById('fawry_details').style.display = 'none';
+            document.getElementById('visa_details').style.display = 'none';
+            document.getElementById('mobile_number').style.display = 'none';
+            document.getElementById('expiry_error').style.display = 'none';  // Hide expiry error message
+            document.getElementById('mobile_error').style.display = 'none'; // Hide mobile error message
+
+            if (paymentMethod === 'fawry_plus') {
+                document.getElementById('mobile_number').style.display = 'block'; // Show mobile number section
+            } else if (paymentMethod === 'visa_card') {
+                document.getElementById('visa_details').style.display = 'block';
+            }
+        }
+
+        function handleDonationSubmit(event) {
+            event.preventDefault();
+            const paymentMethod = document.getElementById('payment_method').value;
+
+            // Reset error messages
+            document.getElementById('form_error').style.display = 'none';
+            document.getElementById('expiry_error').style.display = 'none';  // Hide expiry error message
+            document.getElementById('mobile_error').style.display = 'none'; // Hide mobile error message
+
+            // Check if "Agree to Terms" is checked
+            if (!document.getElementById('agree').checked) {
+                document.getElementById('form_error').style.display = 'block';
+                document.getElementById('form_error').textContent = 'You must agree to the terms and conditions.';
+                return false;
+            }
+
+            // If Fawry Plus payment method is selected, check if mobile number is entered
+            if (paymentMethod === 'fawry_plus') {
+                const mobileNumber = document.getElementById('mobile_number_input').value;
+
+                if (!mobileNumber) {
+                    document.getElementById('mobile_error').style.display = 'block';  // Show error message
+                    return false; // Prevent form submission
+                }
+            }
+
+            // If Visa payment method is selected, check if all required fields are filled and validated
+            if (paymentMethod === 'visa_card') {
+                const cardNumber = document.getElementById('card_number').value;
+                const expiryDate = document.getElementById('expiry_date').value;
+                const cvv = document.getElementById('cvv').value;
+
+                let valid = true;
+
+                // Visa card number must be 16 digits
+                if (cardNumber.length !== 16 || !/^\d{16}$/.test(cardNumber)) {
+                    document.getElementById('form_error').style.display = 'block';
+                    document.getElementById('form_error').textContent = 'Please enter a valid 16-digit Visa card number.';
+                    valid = false;
+                }
+
+                // Expiry date must be in MM/YY format
+                if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+                    document.getElementById('form_error').style.display = 'block';
+                    document.getElementById('form_error').textContent = 'Please enter a valid expiry date in MM/YY format.';
+                    valid = false;
+                } else {
+                    // Check if the expiry date is in the past
+                    const currentDate = new Date();
+                    const [month, year] = expiryDate.split('/');
+                    const expiryMonth = parseInt(month, 10);
+                    const expiryYear = parseInt(year,);
+
+                    const expiryDateObject = new Date(`20${expiryYear}`, expiryMonth - 1); // Month is 0-indexed in JavaScript
+
+                    if (expiryDateObject < currentDate) {
+                        document.getElementById('expiry_error').style.display = 'block';  // Show expiry error message
+                        valid = false;
+                    }
+                }
+
+                // CVV must be 3 digits
+                if (cvv.length !== 3 || !/^\d{3}$/.test(cvv)) {
+                    document.getElementById('form_error').style.display = 'block';
+                    document.getElementById('form_error').textContent = 'Please enter a valid 3-digit CVV.';
+                    valid = false;
+                }
+
+                if (!valid) {
+                    return false; // Prevent form submission if validation fails
+                }
+
+                // Hide donation form and show Visa message
+                document.getElementById('donationContainer').style.display = 'none';
+                document.getElementById('visaMessage').style.display = 'block';
+
+                // Simulate donation success after some time (replace with actual processing logic)
+                setTimeout(() => {
+                    document.getElementById('visaMessage').style.display = 'none';
+                    document.getElementById('thankYouMessage').style.display = 'block';
+                }, 3000);
+            } else {
+                // Normal donation processing for other payment methods
+                document.getElementById('donationContainer').style.display = 'none';
+                document.getElementById('thankYouMessage').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

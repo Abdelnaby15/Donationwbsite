@@ -1,0 +1,142 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f2f6fc;
+    color: #004080;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #004080;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 1.1rem;
+    color: #004080;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+    width: 100%;
+    padding: 18px;
+    margin: 8px 0 20px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    background: #f0f8ff;
+    color: #004080;
+    transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #ff9933;
+    background: #fff;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #004080;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 64, 128, 0.6);
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #003060;
+    box-shadow: 0 10px 25px rgba(0, 64, 128, 0.8);
+    transform: scale(1.05);
+}
+
+#payment_details {
+    margin-top: 30px;
+    display: none;
+}
+
+#mobile_number, #visa_details, #fawry_details {
+    margin-top: 20px;
+}
+
+#mobile_number input[type="text"],
+#visa_details input[type="text"] {
+    font-size: 1.1rem;
+    padding: 15px;
+}
+
+#fawry_confirm {
+    width: 100%;
+    padding: 14px;
+    background: #ff9933;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255, 153, 51, 0.6);
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+#fawry_confirm:hover {
+    background: #cc7a29;
+    box-shadow: 0 10px 25px rgba(255, 153, 51, 0.8);
+    transform: scale(1.05);
+}
+
+#thankYouMessage {
+    display: none;
+    text-align: center;
+    font-size: 1.5rem;
+    color: #004080;
+}
+
+#thankYouMessage h2 {
+    font-size: 2.5rem;
+}
+
+#thankYouMessage button {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    background-color: #004080;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    margin-top: 20px;
+}
+
+#thankYouMessage button:hover {
+    background-color: #003060;
+}
